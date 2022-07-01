@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-/* routes */
+app.use('/', require('./routes/index'));
 app.use('/users', auth, require('./routes/users'));
 app.use('/movies', auth, require('./routes/movies'));
 
