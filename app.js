@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
+const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -21,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 /* routes */
+app.use('/users', auth, require('./routes/users'));
+app.use('/movies', auth, require('./routes/movies'));
 
 app.use(errorLogger);
 
