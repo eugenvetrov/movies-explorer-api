@@ -12,7 +12,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const { PORT = 5000 } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect('mongodb://localhost:27017/moviedb');
 
 app.use(cors());
 app.use(cookieParser());
