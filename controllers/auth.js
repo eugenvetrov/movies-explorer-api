@@ -9,23 +9,23 @@ const { NODE_ENV, JWT_SECRET } = process.env ? process.env : { NODE_ENV: '', JWT
 
 const createUser = (req, res, next) => {
   const {
-    name, about, avatar, email, password,
+    name, email, password,
   } = req.body;
   bcrypt
     .hash(password, 10)
     .then((hash) => {
       User.validate({
-        name, about, avatar, email, password,
+        name, email, password,
       });
       return hash;
     })
     .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
+      name, email, password: hash,
     }))
     .then((user) => {
       res.send({
         data: {
-          name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+          name: user.name, email: user.email,
         },
       });
     })
