@@ -19,7 +19,7 @@ const validateEmail = (value) => {
 router.get('/me', checkUser);
 router.patch('/me', celebrate({
   body: {
-    name: Joi.string().min(2).max(30).required(),
+    name: Joi.string().min(1).max(30).required(),
     email: Joi.string().custom(validateEmail).required(),
   },
 }), updateUser);

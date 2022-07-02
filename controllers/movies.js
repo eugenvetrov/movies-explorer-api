@@ -7,7 +7,7 @@ const ForbiddenError = require('../errors/forbidden');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
-    .then((cards) => res.send({ cards }))
+    .then((movies) => res.send({ movies }))
     .catch(() => {
       next(new ServerError());
     });
@@ -49,7 +49,7 @@ const createMovie = (req, res, next) => {
 const deleteMovieById = (req, res, next) => {
   Movie.findById(req.params.movieId).then((movie) => {
     if (!movie) {
-      next(new NotFoundError('Карточка не найдена'));
+      next(new NotFoundError('Фильм не найден'));
     }
     return movie;
   })
