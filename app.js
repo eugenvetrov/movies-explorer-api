@@ -5,10 +5,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
-const auth = require('./middlewares/auth');
+const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
-const NotFoundError = require('./errors/notFound');
 
 const { PORT = 5000, DB_ADRESS } = process.env;
 const app = express();
@@ -22,13 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-app.use('/', require('./routes/index'));
-app.use('/users', auth, require('./routes/users'));
-app.use('/movies', auth, require('./routes/movies'));
-
-app.use('*', auth, (req, res, next) => {
-  next(new NotFoundError('Такой запрос не найден'));
-});
+app.use(router);
 
 app.use(errorLogger);
 
