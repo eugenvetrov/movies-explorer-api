@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
+const helmet = require('helmet');
 const router = require('./routes/index');
+const rateLimiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -14,6 +16,8 @@ const app = express();
 
 mongoose.connect(NODE_ENV === 'production' ? DB_ADRESS : 'mongodb://localhost:27017/moviesdb');
 
+app.use(helmet());
+app.use(rateLimiter);
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
