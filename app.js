@@ -10,10 +10,10 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./errors/notFound');
 
-const { PORT = 5000 } = process.env;
+const { PORT = 5000, DB_ADRESS } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/moviesdb');
+mongoose.connect(DB_ADRESS);
 
 app.use(cors());
 app.use(cookieParser());
