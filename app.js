@@ -9,10 +9,10 @@ const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 
-const { PORT = 5000, DB_ADRESS } = process.env;
+const { NODE_ENV, PORT = 5000, DB_ADRESS } = process.env;
 const app = express();
 
-mongoose.connect(DB_ADRESS);
+mongoose.connect(NODE_ENV === 'production' ? DB_ADRESS : 'mongodb://localhost:27017/moviesdb');
 
 app.use(cors());
 app.use(cookieParser());
