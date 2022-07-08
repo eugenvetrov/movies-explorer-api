@@ -32,14 +32,13 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const fields = Object.keys(err.errors).join(', ');
-        next(new BadRequestError(`Поле ${fields} заполнено некорректно. ${err.errors.email ? err.errors.email : ''}${err.errors.password ? err.errors.password : ''}`));
-      } else if (err.code === 11000) {
-        next(
+        return next(new BadRequestError(`Поле ${fields} заполнено некорректно. ${err.errors.email ? err.errors.email : ''}${err.errors.password ? err.errors.password : ''}`));
+      } if (err.code === 11000) {
+        return next(
           new ConflictError('Данный пользователь уже существует в базе данных'),
         );
-      } else {
-        next(new ServerError(err.message));
       }
+      return next(new ServerError(err.message));
     });
 };
 
@@ -51,16 +50,14 @@ const login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'our_little_secret', { expiresIn: '7d' });
       res.status(200).cookie('jwt', token, { httpOnly: true }).send({ token });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 const clearCookie = (req, res, next) => {
   try {
-    res.status(200).clearCookie('jwt').send({ message: 'Выход' });
+    return res.status(200).clearCookie('jwt').send({ message: 'Выход' });
   } catch (err) {
-    next(new ServerError());
+    return next(new ServerError());
   }
 };
 

@@ -8,9 +8,7 @@ const ForbiddenError = require('../errors/forbidden');
 const getMovies = (req, res, next) => {
   Movie.find({})
     .then((movies) => res.send({ data: movies }))
-    .catch(() => {
-      next(new ServerError());
-    });
+    .catch(() => next(new ServerError()));
 };
 
 const createMovie = (req, res, next) => {
@@ -37,19 +35,18 @@ const createMovie = (req, res, next) => {
     .then((movie) => res.send({ movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Данные фильма представлены некорректно'));
-      } else if (err.code === 11000) {
-        next(new ConflictError('Данный фильм уже добавлен'));
-      } else {
-        next(new ServerError());
+        return next(new BadRequestError('Данные фильма представлены некорректно'));
+      } if (err.code === 11000) {
+        return next(new ConflictError('Данный фильм уже добавлен'));
       }
+      return next(new ServerError());
     });
 };
 
 const deleteMovieById = (req, res, next) => {
   Movie.findById(req.params.movieId).then((movie) => {
     if (!movie) {
-      next(new NotFoundError('Фильм не найден'));
+      return next(new NotFoundError('Фильм не найден'));
     }
     return movie;
   })
@@ -62,14 +59,11 @@ const deleteMovieById = (req, res, next) => {
     })
     .then((movie) => {
       if (!movie) {
-        next(new NotFoundError('Фильм не найден'));
-      } else {
-        res.send({ message: 'Фильм удален' });
+        return next(new NotFoundError('Фильм не найден'));
       }
+      return res.send({ message: 'Фильм удален' });
     })
-    .catch(() => {
-      next(new ServerError());
-    });
+    .catch(() => next(new ServerError()));
 };
 
 module.exports = {
