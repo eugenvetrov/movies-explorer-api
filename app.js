@@ -17,13 +17,12 @@ const app = express();
 mongoose.connect(NODE_ENV === 'production' ? DB_ADRESS : 'mongodb://localhost:27017/moviesdb');
 
 app.use(helmet());
+app.use(requestLogger);
 app.use(rateLimiter);
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(requestLogger);
 
 app.use(router);
 
