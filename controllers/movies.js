@@ -54,14 +54,10 @@ const deleteMovieById = (req, res, next) => {
       if (movie.owner.toString() !== req.user._id) {
         next(new ForbiddenError());
         return null;
-      }
-      return Movie.findByIdAndRemove(req.params.movieId);
-    })
-    .then((movie) => {
-      if (!movie) {
+      } if (!movie) {
         return next(new NotFoundError('Фильм не найден'));
       }
-      return res.send({ message: 'Фильм удален' });
+      return movie.remove().then(() => res.send({ message: movie }));
     })
     .catch(() => next(new ServerError()));
 };
