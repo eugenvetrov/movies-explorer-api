@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Movie = require('../models/movie');
 const ServerError = require('../errors/server');
 const BadRequestError = require('../errors/badRequest');
@@ -6,7 +7,7 @@ const NotFoundError = require('../errors/notFound');
 const ForbiddenError = require('../errors/forbidden');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: mongoose.Types.ObjectId(req.user._id) })
     .then((movies) => res.send({ data: movies }))
     .catch(() => next(new ServerError()));
 };
