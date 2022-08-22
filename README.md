@@ -8,8 +8,6 @@
 
 В части бэкенд используется Express, MongoDB, Mongoose, Node.js.
 
-Репозиторий для приложения проекта `Movies`. 
-
 Ссылка на сайт:
 
 <http://api.evg.vetrow.movies.nomoredomains.sbs/>
